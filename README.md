@@ -3,25 +3,51 @@ sesATParser
 
 Hayes AT command parser.
 
-This code is currently not stand-alone, but it is used with the
-sesTelnetServer so I wanted to post it here.
+NOTE: Currently, this does not actually parse AT commands. It only handles
+the "+++" escape sequence to get in to command mode. This is all I needed
+initially, but I will be adding a simple parser based on the Hayes modem
+style commands. I wanted to post this in case anyone else wanted to work
+with it until I get around to finishing my project...
 
-To use, basically you have to call a function inside your main
-loop that reads each byte/character:
+REVISION
+========
+2014-03-03 allenh - Initial, hastily created README file.
 
-if (Serial.available()>0)
-{
-  ch = Serial.read();
-  if (cmdModeCheck(ch)==true) cmdMode();
+FILES
+=====
 
-  // process 'ch' as desired
-}
-	
-cmdModeCheck() will keep track of what has been coming in, looking for a
-pause and then the escape sequence ("+++", configurable), followed by
-another pause. If the conditions are matched, it returns true and you
-can call your cmdMode() function to handle commands, and when you exit
-it returns back to normal operation.
+README.md               - this file
+ATParserDemo.ino        - end-user demo program
+sesATParser.ino         - the actual AT parser code
+sesATParserConfig.h		- config for the AT parser
 
-Examples will be provided later...
-	
+CONFIGURATION
+=============
+
+By default, the AT Parser is set to look for "+++" with a one second gaurd
+time (pause in front, and after). It can be altered to look for other escape
+sequences, and there is even some commented out code to make it look for
+something other than a series of repeating characters. The normal Hayes
+standard only allows for setting the escape character, which defaults to
+"+", but you could customize it to be "***" with a three second pause before
+and after.
+
+// Define the escape sequence.
+#define ESC_GUARD_TIME  1000 // Seconds required before/after escape sequence.
+#define ESC_CHARACTER   '+'  // Default escape character.
+
+RUNNING
+=======
+
+The demo program prints a message, then will just echo anything typed back to
+the console. If there is a one second pause, followed by "+++" and another
+one second pause, command mode will be enabled. (Note that by default, the
+Serial Monitor in Arduino's IDE will always echo a CR/LF after anything
+you send, thus it will be sending "+++CRLF" so the parser will not be
+seeing a one second pause after the last "+". To get around this, you have
+to turn the Serial Monitor to 'No line ending' so you can type the "+++"
+at the top and press Send/Enter and have it sent without any CRLF after
+it. Then, once you are in command mode, you can turn back on the CRLF so
+you can type commands.)
+
+Just a quick and dirty demo.
