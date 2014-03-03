@@ -16,10 +16,10 @@ REVISION
 FILES
 =====
 
-README.md               - this file
-ATParserDemo.ino        - end-user demo program
-sesATParser.ino         - the actual AT parser code
-sesATParserConfig.h		- config for the AT parser
+* README.md - this file
+* ATParserDemo.ino - end-user demo program
+* sesATParser.ino - the actual AT parser code
+* sesATParserConfig.h - config for the AT parser
 
 CONFIGURATION
 =============
@@ -32,9 +32,11 @@ standard only allows for setting the escape character, which defaults to
 "+", but you could customize it to be "***" with a three second pause before
 and after.
 
+```
 // Define the escape sequence.
 #define ESC_GUARD_TIME  1000 // Seconds required before/after escape sequence.
 #define ESC_CHARACTER   '+'  // Default escape character.
+```
 
 RUNNING
 =======
