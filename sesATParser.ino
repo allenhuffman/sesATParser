@@ -18,15 +18,11 @@
  */
 /*---------------------------------------------------------------------------*/
 
-#define INBUF_SIZE      80
-#define OUTBUF_SIZE     80
-
-#define LEDBLINK_PIN    13
-#define LEDBLINK_MS     1000
+#include "sesATParserConfig.h"
 
 // Define the escape sequence.
-#define ESC_GUARD_TIME  1000 // Seconds required before/after escape sequence.
-#define ESC_CHARACTER   '+'  // Default escape character.
+//#define ESC_GUARD_TIME  1000 // Seconds required before/after escape sequence.
+//#define ESC_CHARACTER   '+'  // Default escape character.
 
 /*---------------------------------------------------------------------------*/
 // Globals.
@@ -37,36 +33,10 @@ static char  escCharacter = ESC_CHARACTER;  // Escape character
 
 /*---------------------------------------------------------------------------*/
 // Process some Hayes modem style "AT" commands.
-#define CMDLINE_SIZE 80
 #define CR           13
 #define BEL          7
 #define BS           8
 #define CAN          24
-
-void cmdMode()
-{
-  char  cmdLine[CMDLINE_SIZE];
-  byte  len;
-
-  Serial.println();
-  Serial.println("OK");
-
-  while(1)
-  {
-    len = readCmdLine(cmdLine, CMDLINE_SIZE);
-    if (len>0)
-    {
-      Serial.print(">");
-      Serial.println(cmdLine);
-
-      if (strncmp(cmdLine, "ATO", 3)==0) break;
-      if (strncmp(cmdLine, "ATDI", 3)==0)
-      {
-        Serial.println("Telnet...");
-      }
-    }
-  } // end of while(1)
-}
 
 byte readCmdLine(char *cmdLine, size_t len)
 {
@@ -106,7 +76,7 @@ byte readCmdLine(char *cmdLine, size_t len)
 
       default:
         // If there is room, store any printable characters in the cmdline.
-        if (cmdLen<CMDLINE_SIZE)
+        if (cmdLen<len)
         {
           if ((ch>31) && (ch<127)) // isprint(ch) does not work.
           {
@@ -190,7 +160,7 @@ boolean cmdModeCheck(char ch)
     }
   } // end of if (ch==0) else
 
-    return false; // No, it is not time for Command Mode.
+  return false; // No, it is not time for Command Mode.
 }
 /*---------------------------------------------------------------------------*/
 
